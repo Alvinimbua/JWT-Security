@@ -1,11 +1,15 @@
 package com.imbuka.securityjwt.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,6 +30,14 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
 
+    }
+
+    @PostMapping("/refresh-token")
+    public void  refreshToken(
+            HttpServletRequest request, //object where we can get or read the authorization header which will hold the refreshToken
+            HttpServletResponse response //object that will help us re-inject the response back to the user
+    ) throws IOException {
+        authenticationService.refreshToken(request, response);
     }
 
 }
